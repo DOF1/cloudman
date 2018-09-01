@@ -21,8 +21,6 @@ Ball.MainMenu.prototype = {
 		this.shopButton.input.useHandCursor = true;
 		this.settingsButton.input.useHandCursor = true;
 		this.exitButton.input.useHandCursor = true;
-
-		// button to "read the article"
 	},
 	startGame: function() {
 		this.game.state.start('Howto');

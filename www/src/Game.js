@@ -6,12 +6,11 @@ Ball.Game.prototype = {
 		this.physics.arcade.enable(pan);
 		pan.body.allowGravity = false;
 		pan.body.immovable = true;
-		
+		this.game.time.advancedTiming = true;
 		vel=250;
 		dir = true;
 		score = 0;
 		lock = 1;
-		rainbow = [0x9400d3,0x0008ff,0x0000ff,0x00ff00,0xffff00,0xff7f00,0xff0000,0xff69b4];
 		
 		//localStorage.clear();
 		highscore = localStorage.highscore;
@@ -101,8 +100,6 @@ Ball.Game.prototype = {
 	},
 	update: function() {
 		this.physics.arcade.collide(platforms, player,this.onCollisionLedge);
-		// this.physics.arcade.collide(pan, player);
-		//this.physics.arcade.overlap(player,coin,this.onCollision);
 		
 		if(lock == 0 && player.body.touching.down){
 			if (vel == -250){
@@ -164,5 +161,6 @@ Ball.Game.prototype = {
 	render: function() {
 		//this.game.debug.body(player);
 		//this.game.debug.text(player.frame, 32, 32);
+		this.game.debug.text('FPS:' + this.game.time.fps, 260, 10, "#00ff00");
 	}
 };
