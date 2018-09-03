@@ -21,27 +21,22 @@ Ball.MainMenu.prototype = {
 		this.shopButton.input.useHandCursor = true;
 		this.settingsButton.input.useHandCursor = true;
 		this.exitButton.input.useHandCursor = true;
+		
+		this.shopButton.alpha = 0.2;
+		this.settingsButton.alpha = 0.2;
 	},
 	startGame: function() {
 		this.game.state.start('Howto');
 	},
 	WIP: function() {
-		alert('WIP');
+		console.log('WIP');
 	},
 	exitGame: function() {
 		if (confirm("Exit Cloud Man?")){
-			if (navigator.app) {
-				navigator.app.exitApp();
-			}
-			else if (navigator.device) {
-				navigator.device.exitApp();
-			}
-			else {
-				window.close();
-			}
+			window.close();
 		}
 	},
 	settings: function() {
-		alert('WIP');
+		console.log('WIP');
 	}
 };

@@ -11,7 +11,14 @@ Ball.Game.prototype = {
 		dir = true;
 		score = 0;
 		lock = 1;
-		
+		rec1 = this.game.add.graphics(0,0);
+		rec1.beginFill(0xffffff);
+		rec1.drawRect(0, 0, 160, 534);
+		rec1.alpha = 0.2;
+		rec2 = this.game.add.graphics(0,0);
+		rec2.beginFill(0xFF0000);
+		rec2.drawRect(160, 0, 160, 534);
+		rec2.alpha = 0;
 		//localStorage.clear();
 		highscore = localStorage.highscore;
 		if(!highscore){
@@ -52,9 +59,30 @@ Ball.Game.prototype = {
 		ledge.body.immovable = true;
 		ledge.body.velocity.y = 75;
 		this.attenteCreatePlat(1500);
-		
+		rec1.inputEnabled = true;
+		rec1.events.onInputDown.add(this.listener1, this);
+		rec2.inputEnabled = true;
+		rec2.events.onInputDown.add(this.listener2, this);
 	},
-	
+	listener1: function() {
+		if(player.body.touching.down && player.x >168){
+			console.log("ok");
+			player.body.velocity.y = -329;
+			lock = 0;
+			if(vel == -250){
+				player.play('jumpleft');
+			}
+		}
+	},
+	listener2: function() {
+		if(player.body.touching.down && player.x <168){
+			player.body.velocity.y = -329;
+			lock = 0;
+			if(vel == 250){
+				player.play('jumpright');
+			}
+		}
+	},
 	createPlat: function() {
 		if(dir == true){
 			ledge = platforms.create(200+this.getRandomInt(50), 52, 'platform');
@@ -71,7 +99,8 @@ Ball.Game.prototype = {
 		ledge.body.allowGravity = false;
 		ledge.body.immovable = true;
 		ledge.body.velocity.y = 75;
-        this.attenteCreatePlat(1500);
+		timeFps = 25 * this.game.time.fps;
+        this.attenteCreatePlat(timeFps);
 	},
 	attenteCreatePlat: function(time) {
 		this.game.time.events.add(time, this.createPlat,this);
@@ -100,7 +129,6 @@ Ball.Game.prototype = {
 	},
 	update: function() {
 		this.physics.arcade.collide(platforms, player,this.onCollisionLedge);
-		
 		if(lock == 0 && player.body.touching.down){
 			if (vel == -250){
 				player.play('left');
@@ -133,17 +161,17 @@ Ball.Game.prototype = {
 				player.play('jumpright');
 			}
 		}
-		if (this.input.activePointer.isDown && player.body.touching.down)
-		{
-			player.body.velocity.y = -329;
-			lock = 0;
-			if(vel == -250){
-				player.play('jumpleft');
-			}
-			else if(vel == 250){
-				player.play('jumpright');
-			}
-		}
+		// if (this.input.activePointer.isDown && player.body.touching.down)
+		// {
+			// player.body.velocity.y = -329;
+			// lock = 0;
+			// if(vel == -250){
+				// player.play('jumpleft');
+			// }
+			// else if(vel == 250){
+				// player.play('jumpright');
+			// }
+		// }
 		if(player.body.blocked.down){
 			if(score>highscore){
 				localStorage.highscore = score;
@@ -156,7 +184,6 @@ Ball.Game.prototype = {
 		if (this.checkOverlap(player, coin)&& coin.alive){
 			this.onCollision(coin);
 		}
-
 	},
 	render: function() {
 		//this.game.debug.body(player);
