@@ -186,8 +186,6 @@ Ball.Game.prototype = {
 		}
 	},
 	render: function() {
-		//this.game.debug.body(player);
-		//this.game.debug.text(player.frame, 32, 32);
 		this.game.debug.text('FPS:' + this.game.time.fps, 260, 10, "#00ff00");
 	}
 };
