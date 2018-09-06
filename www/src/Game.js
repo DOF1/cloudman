@@ -27,6 +27,7 @@ Ball.Game.prototype = {
 		text = this.add.bitmapText(15, 10, 'myfont', '0', 60);
 		text2 = this.add.bitmapText(228, 5, 'myfont', highscore, 40); 
 		
+		
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		this.time.desiredFps = 70;
 		this.physics.arcade.gravity.y = 700;
@@ -34,6 +35,9 @@ Ball.Game.prototype = {
 		coin = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin');
 		this.physics.arcade.enable(coin);
 		coin.body.allowGravity = false;
+		// coin2 = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin2');
+		// this.physics.arcade.enable(coin2);
+		// coin2.body.allowGravity = false;
 		
 		player = this.add.sprite(10, 0, 'player');
 		right = player.animations.add('right', [0,1,2,3,4,5], 13, true);
@@ -42,7 +46,6 @@ Ball.Game.prototype = {
 		jumpleft = player.animations.add('jumpleft', [7], 13, true);
 		player.smoothed = false;
 		player.scale.set(1.5);
-		
 		
 		this.physics.arcade.enable(player);
 		player.body.bounce.y = 0;
@@ -66,8 +69,7 @@ Ball.Game.prototype = {
 	},
 	listener1: function() {
 		if(player.body.touching.down && player.x >168){
-			console.log("ok");
-			player.body.velocity.y = -329;
+			player.body.velocity.y = -327 ;
 			lock = 0;
 			if(vel == -250){
 				player.play('jumpleft');
@@ -76,7 +78,7 @@ Ball.Game.prototype = {
 	},
 	listener2: function() {
 		if(player.body.touching.down && player.x <168){
-			player.body.velocity.y = -329;
+			player.body.velocity.y = -327 ;
 			lock = 0;
 			if(vel == 250){
 				player.play('jumpright');
@@ -86,6 +88,9 @@ Ball.Game.prototype = {
 	createPlat: function() {
 		if(dir == true){
 			ledge = platforms.create(200+this.getRandomInt(50), 52, 'platform');
+			// if (!coin2.alive){
+				// coin2 = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin2');
+			// }
 			dir = false;
 		}
 		else if(dir == false){
@@ -99,14 +104,20 @@ Ball.Game.prototype = {
 		ledge.body.allowGravity = false;
 		ledge.body.immovable = true;
 		ledge.body.velocity.y = 75;
-		timeFps = 25 * this.game.time.fps;
-        this.attenteCreatePlat(timeFps);
+		deltaTime = (this.game.time.elapsed * this.game.time.fps) / 1000;
+        this.attenteCreatePlat(1500*deltaTime);
 	},
 	attenteCreatePlat: function(time) {
 		this.game.time.events.add(time, this.createPlat,this);
 	},
 	onCollision: function(piece) {
-		score+=3;
+		if(piece === coin){
+			score+=3;
+			console.log("coin");
+		}
+		// if(piece === coin2){
+			// console.log("coin2");
+		// }
 		text.setText(score);
 		piece.kill();
 
@@ -122,7 +133,7 @@ Ball.Game.prototype = {
 	},
 	onCollisionLedge: function(plr,platform) {
 		if(platform.tint==16777215&& player.body.touching.down){
-			platform.tint = 0x46a8ea;// bfbfbf
+			platform.tint = 0x46a8ea;
 			score++;
 			text.setText(score);
 		}
@@ -161,17 +172,6 @@ Ball.Game.prototype = {
 				player.play('jumpright');
 			}
 		}
-		// if (this.input.activePointer.isDown && player.body.touching.down)
-		// {
-			// player.body.velocity.y = -329;
-			// lock = 0;
-			// if(vel == -250){
-				// player.play('jumpleft');
-			// }
-			// else if(vel == 250){
-				// player.play('jumpright');
-			// }
-		// }
 		if(player.body.blocked.down){
 			if(score>highscore){
 				localStorage.highscore = score;
@@ -184,8 +184,11 @@ Ball.Game.prototype = {
 		if (this.checkOverlap(player, coin)&& coin.alive){
 			this.onCollision(coin);
 		}
+		// if (this.checkOverlap(player, coin2)&& coin2.alive){
+			// this.onCollision(coin2);
+		// }
 	},
 	render: function() {
-		this.game.debug.text('FPS:' + this.game.time.fps, 260, 10, "#00ff00");
+		//this.game.debug.text('FPS:' + this.game.time.fps, 260, 10, "#00ff00");
 	}
 };

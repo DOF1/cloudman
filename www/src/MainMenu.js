@@ -32,9 +32,7 @@ Ball.MainMenu.prototype = {
 		console.log('WIP');
 	},
 	exitGame: function() {
-		if (confirm("Exit Cloud Man?")){
-			window.close();
-		}
+		window.close();
 	},
 	settings: function() {
 		console.log('WIP');

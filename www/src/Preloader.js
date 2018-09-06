@@ -6,6 +6,7 @@ Ball.Preloader.prototype = {
 		this.load.setPreloadSprite(this.preloadBar);
 		this.load.spritesheet('player', 'img/playersheet.png', 16, 24,13);
 		this.load.image('coin', 'img/coin.png');
+		this.load.image('coin2', 'img/coin2.png');
 		this.load.image('panel', 'img/panel.png');
 		this.load.image('title', 'img/title.png');
 		this.load.image('screen-bg', 'img/screen-bg.png');
