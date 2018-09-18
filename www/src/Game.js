@@ -14,11 +14,11 @@ Ball.Game.prototype = {
 		rec1 = this.game.add.graphics(0,0);
 		rec1.beginFill(0xffffff);
 		rec1.drawRect(0, 0, 160, 534);
-		rec1.alpha = 0.2;
+		rec1.alpha = 0;
 		rec2 = this.game.add.graphics(0,0);
-		rec2.beginFill(0xFF0000);
+		rec2.beginFill(0xffffff);
 		rec2.drawRect(160, 0, 160, 534);
-		rec2.alpha = 0;
+		rec2.alpha = 0.1;
 		//localStorage.clear();
 		highscore = localStorage.highscore;
 		if(!highscore){
@@ -66,12 +66,19 @@ Ball.Game.prototype = {
 		rec1.events.onInputDown.add(this.listener1, this);
 		rec2.inputEnabled = true;
 		rec2.events.onInputDown.add(this.listener2, this);
+		
+		emitter = this.game.add.emitter(0, 0, 100);
+		emitter.makeParticles('particle');
+		emitter.gravity = 200;
+
 	},
 	listener1: function() {
 		if(player.body.touching.down && player.x >168){
 			player.body.velocity.y = -327 ;
 			lock = 0;
 			if(vel == -250){
+				rec1.alpha = 0;
+				rec2.alpha = 0.1;
 				player.play('jumpleft');
 			}
 		}
@@ -81,6 +88,8 @@ Ball.Game.prototype = {
 			player.body.velocity.y = -327 ;
 			lock = 0;
 			if(vel == 250){
+				rec1.alpha = 0.1;
+				rec2.alpha = 0;
 				player.play('jumpright');
 			}
 		}
@@ -113,7 +122,6 @@ Ball.Game.prototype = {
 	onCollision: function(piece) {
 		if(piece === coin){
 			score+=3;
-			console.log("coin");
 		}
 		// if(piece === coin2){
 			// console.log("coin2");
@@ -133,7 +141,10 @@ Ball.Game.prototype = {
 	},
 	onCollisionLedge: function(plr,platform) {
 		if(platform.tint==16777215&& player.body.touching.down){
-			platform.tint = 0x46a8ea;
+			platform.tint = 0x71b8ea;
+			emitter.x = player.x;
+			emitter.y = player.y+30;
+			emitter.start(true, 2000, null, 10);
 			score++;
 			text.setText(score);
 		}
@@ -141,6 +152,9 @@ Ball.Game.prototype = {
 	update: function() {
 		this.physics.arcade.collide(platforms, player,this.onCollisionLedge);
 		if(lock == 0 && player.body.touching.down){
+			emitter.x = player.x;
+			emitter.y = player.y+30;
+			emitter.start(true, 2000, null, 10);
 			if (vel == -250){
 				player.play('left');
 				lock = 1;
