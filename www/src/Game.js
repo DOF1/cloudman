@@ -35,9 +35,9 @@ Ball.Game.prototype = {
 		coin = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin');
 		this.physics.arcade.enable(coin);
 		coin.body.allowGravity = false;
-		// coin2 = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin2');
-		// this.physics.arcade.enable(coin2);
-		// coin2.body.allowGravity = false;
+		coin2 = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin2');
+		this.physics.arcade.enable(coin2);
+		coin2.body.allowGravity = false;
 		
 		player = this.add.sprite(10, 0, 'player');
 		right = player.animations.add('right', [0,1,2,3,4,5], 13, true);
@@ -49,7 +49,6 @@ Ball.Game.prototype = {
 		
 		this.physics.arcade.enable(player);
 		player.body.bounce.y = 0;
-		//player.body.friction = 0.5;
 		player.body.collideWorldBounds = true;
 		
 		cursors = this.input.keyboard.createCursorKeys();
@@ -84,7 +83,7 @@ Ball.Game.prototype = {
 		}
 	},
 	listener2: function() {
-		if(player.body.touching.down && player.x <168){
+		if(player.body.touching.down && player.x <=168){
 			player.body.velocity.y = -327 ;
 			lock = 0;
 			if(vel == 250){
@@ -97,9 +96,9 @@ Ball.Game.prototype = {
 	createPlat: function() {
 		if(dir == true){
 			ledge = platforms.create(200+this.getRandomInt(50), 52, 'platform');
-			// if (!coin2.alive){
-				// coin2 = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin2');
-			// }
+			if (!coin2.alive){
+				coin2 = this.add.sprite(10+this.getRandomInt(300), 70+this.getRandomInt(200), 'coin2');
+			}
 			dir = false;
 		}
 		else if(dir == false){
@@ -123,9 +122,14 @@ Ball.Game.prototype = {
 		if(piece === coin){
 			score+=3;
 		}
-		// if(piece === coin2){
-			// console.log("coin2");
-		// }
+		if(piece === coin2){
+			if(score>3){
+				score-=3;
+			}
+			else{
+				score=1;
+			}
+		}
 		text.setText(score);
 		piece.kill();
 
@@ -198,9 +202,9 @@ Ball.Game.prototype = {
 		if (this.checkOverlap(player, coin)&& coin.alive){
 			this.onCollision(coin);
 		}
-		// if (this.checkOverlap(player, coin2)&& coin2.alive){
-			// this.onCollision(coin2);
-		// }
+		if (this.checkOverlap(player, coin2)&& coin2.alive){
+			this.onCollision(coin2);
+		}
 	},
 	render: function() {
 		//this.game.debug.text('FPS:' + this.game.time.fps, 260, 10, "#00ff00");

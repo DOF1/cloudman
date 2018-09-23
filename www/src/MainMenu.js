@@ -8,31 +8,28 @@ Ball.MainMenu.prototype = {
 		this.startButton = this.add.button(Ball._WIDTH*0.5, 180, 'button-start', this.startGame, this, 2, 0, 1);
 		this.startButton.anchor.set(0.5,0);
 		this.startButton.scale.setTo(1.1);
-		this.shopButton = this.add.button(Ball._WIDTH*0.5, 250, 'button-shop', this.WIP, this, 2, 0, 1);
+		this.shopButton = this.add.button(Ball._WIDTH*0.5,320 , 'button-shop', this.shop, this, 2, 0, 1);
 		this.shopButton.anchor.set(0.5,0);
 		this.shopButton.scale.setTo(1.1);
-		this.settingsButton = this.add.button(Ball._WIDTH*0.5,320, 'button-settings', this.settings, this, 2, 0, 1);
+		this.settingsButton = this.add.button(Ball._WIDTH*0.5,390, 'button-settings', this.settings, this, 2, 0, 1);
 		this.settingsButton.anchor.set(0.5,0);
 		this.settingsButton.scale.setTo(1.1);
-		this.exitButton = this.add.button(Ball._WIDTH*0.5, 390, 'button-exit', this.exitGame, this, 2, 0, 1);
+		this.exitButton = this.add.button(Ball._WIDTH*0.5,250 , 'button-exit', this.exitGame, this, 2, 0, 1);
 		this.exitButton.anchor.set(0.5,0);
 		this.exitButton.scale.setTo(1.1);
 		this.startButton.input.useHandCursor = true;
 		this.shopButton.input.useHandCursor = true;
 		this.settingsButton.input.useHandCursor = true;
 		this.exitButton.input.useHandCursor = true;
-		
-		this.shopButton.alpha = 0.2;
-		this.settingsButton.alpha = 0.2;
 	},
 	startGame: function() {
-		this.game.state.start('Howto');
+		this.game.state.start('Game');
 	},
-	WIP: function() {
-		console.log('WIP');
+	shop: function() {
+		this.game.state.start('Shop');
 	},
 	exitGame: function() {
-		window.close();
+		this.game.state.start('Howto');
 	},
 	settings: function() {
 		console.log('WIP');
