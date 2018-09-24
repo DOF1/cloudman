@@ -25,7 +25,7 @@ Ball.Game.prototype = {
 			highscore = "0";
 		}
 		text = this.add.bitmapText(15, 10, 'myfont', '0', 60);
-		text2 = this.add.bitmapText(228, 5, 'myfont', highscore, 40); 
+		text2 = this.add.bitmapText(228, 5, 'myfont', highscore, 40);
 		
 		
 		this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -112,8 +112,7 @@ Ball.Game.prototype = {
 		ledge.body.allowGravity = false;
 		ledge.body.immovable = true;
 		ledge.body.velocity.y = 75;
-		deltaTime = (this.game.time.elapsed * this.game.time.fps) / 1000;
-        this.attenteCreatePlat(1500*deltaTime);
+        this.attenteCreatePlat(1500);
 	},
 	attenteCreatePlat: function(time) {
 		this.game.time.events.add(time, this.createPlat,this);

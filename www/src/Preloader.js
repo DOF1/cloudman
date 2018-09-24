@@ -13,10 +13,10 @@ Ball.Preloader.prototype = {
 		this.load.image('platform', 'img/plat.png');
 		this.load.bitmapFont('myfont', 'font/font.png', 'font/font.fnt');
 
-		this.load.spritesheet('button-start', 'img/button-start.png', 146, 51);
-		this.load.spritesheet('button-shop', 'img/button-shop.png', 146, 51);
-		this.load.spritesheet('button-settings', 'img/button-settings.png', 146, 51);
-		this.load.spritesheet('button-exit', 'img/button-exit.png', 146, 51);
+		this.load.spritesheet('button-start', 'img/button-start.png', 100, 51);
+		this.load.spritesheet('button-shop', 'img/button-shop.png', 100, 51);
+		this.load.spritesheet('button-settings', 'img/button-settings.png', 100, 51);
+		this.load.spritesheet('button-exit', 'img/button-exit.png', 100, 51);
 
 	},
 	create: function() {

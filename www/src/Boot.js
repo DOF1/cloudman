@@ -9,6 +9,6 @@ Ball.Boot.prototype = {
 		this.game.scale.pageAlignHorizontally = true;
 		this.game.scale.pageAlignVertically = false;
 		this.game.state.start('Preloader');
-		this.game.stage.backgroundColor = "#D6FACE";
+		this.game.stage.backgroundColor = "##2F8CCD";
 	}
 };

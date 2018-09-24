@@ -14,13 +14,28 @@ Ball.MainMenu.prototype = {
 		this.settingsButton = this.add.button(Ball._WIDTH*0.5,390, 'button-settings', this.settings, this, 2, 0, 1);
 		this.settingsButton.anchor.set(0.5,0);
 		this.settingsButton.scale.setTo(1.1);
-		this.exitButton = this.add.button(Ball._WIDTH*0.5,250 , 'button-exit', this.exitGame, this, 2, 0, 1);
-		this.exitButton.anchor.set(0.5,0);
-		this.exitButton.scale.setTo(1.1);
+		this.howToButton = this.add.button(Ball._WIDTH*0.5,250 , 'button-exit', this.howTo, this, 2, 0, 1);
+		this.howToButton.anchor.set(0.5,0);
+		this.howToButton.scale.setTo(1.1);
 		this.startButton.input.useHandCursor = true;
 		this.shopButton.input.useHandCursor = true;
 		this.settingsButton.input.useHandCursor = true;
-		this.exitButton.input.useHandCursor = true;
+		this.howToButton.input.useHandCursor = true;
+		highscore = localStorage.highscore;
+		if(!highscore){
+			highscore = "0";
+		}
+		text2 = this.add.bitmapText(228, 475, 'myfont', highscore, 40);
+
+		this.physics.startSystem(Phaser.Physics.ARCADE);
+		player = this.add.sprite(0, 450, 'player');
+		this.physics.arcade.enable(player);
+		player.scale.setTo(1.5);
+		player.body.allowGravity = false;
+		player.body.immovable = true;
+		player.body.velocity.x = 200;
+		player.body.bounce.set(1);
+		player.body.collideWorldBounds = true;
 	},
 	startGame: function() {
 		this.game.state.start('Game');
@@ -28,10 +43,10 @@ Ball.MainMenu.prototype = {
 	shop: function() {
 		this.game.state.start('Shop');
 	},
-	exitGame: function() {
+	howTo: function() {
 		this.game.state.start('Howto');
 	},
 	settings: function() {
-		console.log('WIP');
+		this.game.state.start('Settings');
 	}
 };

@@ -1,6 +1,6 @@
-Ball.Howto = function(game) {
+Ball.Settings = function(game) {
 };
-Ball.Howto.prototype = {
+Ball.Settings.prototype = {
 	create: function() {
 		this.add.sprite(0, 0, 'screen-bg');
 		this.startButton = this.add.button(Ball._WIDTH*0.8, 460, 'button-start', this.exitGame, this, 2, 0, 1);
