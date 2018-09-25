@@ -41,4 +41,5 @@
 	<preference name="android-targetSdkVersion" value="26"/>
     <cocoon:plugin name="com.ludei.canvasplus.ios" />
     <cocoon:plugin name="com.ludei.canvasplus.android" />  
+	<!-- <cocoon:plugin name="cocoon-plugin-ads-android-admob"/> -->
 </widget>
