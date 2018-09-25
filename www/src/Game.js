@@ -46,6 +46,7 @@ Ball.Game.prototype = {
 		jumpleft = player.animations.add('jumpleft', [7], 13, true);
 		player.smoothed = false;
 		player.scale.set(1.5);
+		fire = 1;
 		
 		this.physics.arcade.enable(player);
 		player.body.bounce.y = 0;
@@ -194,6 +195,11 @@ Ball.Game.prototype = {
 				localStorage.highscore = score;
 			}
 			this.state.start('MainMenu');
+		}
+		if(score>highscore && fire == 1){
+			text.tint=0xff0000;
+			text2.tint=0x308CCD;
+			fire = 0;
 		}
 		if(platforms.children.length>=6){
 			platforms.remove(platforms.getFirstExists());

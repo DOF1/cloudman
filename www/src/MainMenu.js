@@ -36,6 +36,9 @@ Ball.MainMenu.prototype = {
 		player.body.velocity.x = 200;
 		player.body.bounce.set(1);
 		player.body.collideWorldBounds = true;
+		right = player.animations.add('right', [0,1,2,3,4,5], 13, true);
+		left = player.animations.add('left', [6,7,8,9,10,11], 13, true);
+		player.play('right');
 		//var banner = Cocoon.Ad.AdMob.createBanner("ca-app-pub-3940256099942544/6300978111");
 	},
 	startGame: function() {
@@ -49,5 +52,15 @@ Ball.MainMenu.prototype = {
 	},
 	settings: function() {
 		this.game.state.start('Settings');
+	},
+	update: function() {
+		if (player.body.blocked.right === true)
+		{
+			player.play('left');
+		}
+		else if (player.body.blocked.left === true)
+		{
+			player.play('right');
+		}
 	}
 };
