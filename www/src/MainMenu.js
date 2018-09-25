@@ -22,13 +22,18 @@ Ball.MainMenu.prototype = {
 		this.settingsButton.input.useHandCursor = true;
 		this.howToButton.input.useHandCursor = true;
 		highscore = localStorage.highscore;
+		skin = localStorage.skin;
 		if(!highscore){
 			highscore = "0";
+		}
+		if(!skin){
+			skin = 1;
 		}
 		text2 = this.add.bitmapText(228, 475, 'myfont', highscore, 40);
 
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		player = this.add.sprite(0, 450, 'player');
+		player.smoothed = false;
 		this.physics.arcade.enable(player);
 		player.scale.setTo(1.5);
 		player.body.allowGravity = false;
@@ -36,8 +41,9 @@ Ball.MainMenu.prototype = {
 		player.body.velocity.x = 200;
 		player.body.bounce.set(1);
 		player.body.collideWorldBounds = true;
-		right = player.animations.add('right', [0,1,2,3,4,5], 13, true);
-		left = player.animations.add('left', [6,7,8,9,10,11], 13, true);
+		mult = (skin-1)*12;
+		right = player.animations.add('right', [0+mult,1+mult,2+mult,3+mult,4+mult,5+mult], 13, true);
+		left = player.animations.add('left', [6+mult,7+mult,8+mult,9+mult,10+mult,11+mult], 13, true);
 		player.play('right');
 		//var banner = Cocoon.Ad.AdMob.createBanner("ca-app-pub-3940256099942544/6300978111");
 	},
@@ -51,6 +57,7 @@ Ball.MainMenu.prototype = {
 		this.game.state.start('Howto');
 	},
 	settings: function() {
+		localStorage.clear();
 		this.game.state.start('Settings');
 	},
 	update: function() {

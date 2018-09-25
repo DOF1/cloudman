@@ -21,8 +21,12 @@ Ball.Game.prototype = {
 		rec2.alpha = 0.1;
 		//localStorage.clear();
 		highscore = localStorage.highscore;
+		skin = localStorage.skin;
 		if(!highscore){
 			highscore = "0";
+		}
+		if(!skin){
+			skin = 1;
 		}
 		text = this.add.bitmapText(15, 10, 'myfont', '0', 60);
 		text2 = this.add.bitmapText(228, 5, 'myfont', highscore, 40);
@@ -40,10 +44,11 @@ Ball.Game.prototype = {
 		coin2.body.allowGravity = false;
 		
 		player = this.add.sprite(10, 0, 'player');
-		right = player.animations.add('right', [0,1,2,3,4,5], 13, true);
-		left = player.animations.add('left', [6,7,8,9,10,11], 13, true);
-		jumpright = player.animations.add('jumpright', [1], 13, true);
-		jumpleft = player.animations.add('jumpleft', [7], 13, true);
+		mult = (skin-1)*12;
+		right = player.animations.add('right', [0+mult,1+mult,2+mult,3+mult,4+mult,5+mult], 13, true);
+		left = player.animations.add('left', [6+mult,7+mult,8+mult,9+mult,10+mult,11+mult], 13, true);
+		jumpright = player.animations.add('jumpright', [1+mult], 13, true);
+		jumpleft = player.animations.add('jumpleft', [7+mult], 13, true);
 		player.smoothed = false;
 		player.scale.set(1.5);
 		fire = 1;
