@@ -36,6 +36,7 @@ Ball.MainMenu.prototype = {
 		player.body.velocity.x = 200;
 		player.body.bounce.set(1);
 		player.body.collideWorldBounds = true;
+		var banner = Cocoon.Ad.AdMob.createBanner("ca-app-pub-3940256099942544/6300978111");
 	},
 	startGame: function() {
 		this.game.state.start('Game');
