@@ -7,15 +7,15 @@ Ball.Shop.prototype = {
 		this.startButton.anchor.set(0.5,0);
 		this.startButton.scale.setTo(1.1);
 		this.startButton.input.useHandCursor = true;
-		highscore = localStorage.highscore;
+		pieces = localStorage.pieces;
 		skin = localStorage.skin;
-		if(!highscore){
-			highscore = "0";
+		if(!pieces){
+			pieces = "0";
 		}
 		if(!skin){
 			skin = 1;
 		}
-		text2 = this.add.bitmapText(228, 5, 'myfont', highscore, 40);
+		text2 = this.add.bitmapText(228, 5, 'myfont', pieces, 40);
 		boutton = this.add.group();
 		
 		this.skin1 = this.add.button(40, 60, 'selec', this.selection, this, 2, 0, 1);
@@ -28,7 +28,7 @@ Ball.Shop.prototype = {
 		boutton.add(this.skin1);
 
 		text2 = this.add.bitmapText(215, 129, 'myfont', "50", 30);
-		if(highscore>=50){
+		if(pieces>=50){
 			this.skin2 = this.add.button(180, 60, 'selec', this.selection, this, 2, 0, 1);
 			player2 = this.add.sprite(210, 80, 'player');
 			player2.scale.setTo(2.5);
@@ -39,7 +39,7 @@ Ball.Shop.prototype = {
 		}
 		
 		text3 = this.add.bitmapText(65, 269, 'myfont', "100", 30);
-		if(highscore>=100){
+		if(pieces>=100){
 			this.skin3 = this.add.button(40, 200, 'selec', this.selection, this, 2, 0, 1);
 			player3 = this.add.sprite(70, 220, 'player');
 			player3.scale.setTo(2.5);
@@ -50,7 +50,7 @@ Ball.Shop.prototype = {
 		}
 		
 		text4 = this.add.bitmapText(205, 269, 'myfont', "150", 30);
-		if(highscore>=150){		
+		if(pieces>=150){		
 			this.skin4 = this.add.button(180, 200, 'selec', this.selection, this, 2, 0, 1);
 			player4 = this.add.sprite(210, 220, 'player');
 			player4.scale.setTo(2.5);
@@ -61,7 +61,7 @@ Ball.Shop.prototype = {
 		}
 		
 		text5 = this.add.bitmapText(65, 409, 'myfont', "200", 30);
-		if(highscore>=200){		
+		if(pieces>=200){		
 			this.skin5 = this.add.button(40, 340, 'selec', this.selection, this, 2, 0, 1);
 			player5 = this.add.sprite(70, 360, 'player');
 			player5.scale.setTo(2.5);
@@ -72,7 +72,7 @@ Ball.Shop.prototype = {
 		}
 		
 		text6 = this.add.bitmapText(205, 409, 'myfont', "250", 30);
-		if(highscore>=250){		
+		if(pieces>=250){		
 			this.skin6 = this.add.button(180, 340, 'selec', this.selection, this, 2, 0, 1);
 			player6 = this.add.sprite(210, 360, 'player');
 			player6.scale.setTo(2.5);

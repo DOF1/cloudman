@@ -2,19 +2,19 @@ Ball.MainMenu = function(game) {};
 Ball.MainMenu.prototype = {
 	create: function() {
 		this.add.sprite(0, 0, 'screen-mainmenu');
-		this.gameTitle = this.add.sprite(Ball._WIDTH*0.5, 20, 'title');
+		this.gameTitle = this.add.sprite(Ball._WIDTH*0.5, 15, 'title');
 		this.gameTitle.anchor.set(0.5,0);
 		this.gameTitle.scale.setTo(1.5);
-		this.startButton = this.add.button(Ball._WIDTH*0.5, 180, 'button-start', this.startGame, this, 2, 0, 1);
+		this.startButton = this.add.button(Ball._WIDTH*0.5, 243, 'button-start', this.startGame, this, 2, 0, 1);
 		this.startButton.anchor.set(0.5,0);
 		this.startButton.scale.setTo(1.1);
-		this.shopButton = this.add.button(Ball._WIDTH*0.5,320 , 'button-shop', this.shop, this, 2, 0, 1);
+		this.shopButton = this.add.button(Ball._WIDTH*0.5,383, 'button-shop', this.shop, this, 2, 0, 1);
 		this.shopButton.anchor.set(0.5,0);
 		this.shopButton.scale.setTo(1.1);
-		this.settingsButton = this.add.button(Ball._WIDTH*0.5,390, 'button-settings', this.settings, this, 2, 0, 1);
+		this.settingsButton = this.add.button(Ball._WIDTH*0.5,453, 'button-settings', this.settings, this, 2, 0, 1);
 		this.settingsButton.anchor.set(0.5,0);
 		this.settingsButton.scale.setTo(1.1);
-		this.howToButton = this.add.button(Ball._WIDTH*0.5,250 , 'button-exit', this.howTo, this, 2, 0, 1);
+		this.howToButton = this.add.button(Ball._WIDTH*0.5,313, 'button-exit', this.howTo, this, 2, 0, 1);
 		this.howToButton.anchor.set(0.5,0);
 		this.howToButton.scale.setTo(1.1);
 		this.startButton.input.useHandCursor = true;
@@ -23,16 +23,26 @@ Ball.MainMenu.prototype = {
 		this.howToButton.input.useHandCursor = true;
 		highscore = localStorage.highscore;
 		skin = localStorage.skin;
+		pieces = localStorage.pieces;
 		if(!highscore){
 			highscore = "0";
 		}
 		if(!skin){
 			skin = 1;
 		}
-		text2 = this.add.bitmapText(228, 475, 'myfont', highscore, 40);
+		if(!pieces){
+			pieces = "0";
+		}
+		text2 = this.add.bitmapText(180, 155, 'myfont', highscore, 32);
+		text3 = this.add.bitmapText(180, 185, 'myfont', pieces, 32);
+		text3.tint = 0xaf9e00;
+		coin = this.add.sprite(133, 187, 'coin');
+		coin.scale.setTo(1.5);;
+		coin.animations.add('turn', [0,1,2,3,4,5], 9, true);
+		coin.play('turn');
 
 		this.physics.startSystem(Phaser.Physics.ARCADE);
-		player = this.add.sprite(0, 450, 'player');
+		player = this.add.sprite(0, 216, 'player');
 		player.smoothed = false;
 		this.physics.arcade.enable(player);
 		player.scale.setTo(1.5);
