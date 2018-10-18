@@ -1,10 +1,6 @@
 Ball.Game = function(game) {};
 Ball.Game.prototype = {
-	preload: function() {
-		this.load.image('screen-bg', 'img/screen-bg.png');
-	},
 	create: function() {
-		//this.add.sprite(0, 0, 'screen-bg');
 		background = this.add.tileSprite(0, 0, 320, 534, "screen-bg");
 		pan = this.add.sprite(0, 0, 'panel');
 		this.physics.arcade.enable(pan);
@@ -17,10 +13,6 @@ Ball.Game.prototype = {
 		lock = 1;
 		lock22 = 1;
 		lock21 = 0;
-		coin1x = 10+this.getRandomInt(148);
-		coin1y = 70+this.getRandomInt(200);
-		coin2x = 158+this.getRandomInt(148);
-		coin2y = 70+this.getRandomInt(200);
 		rec1 = this.game.add.graphics(0,0);
 		rec1.beginFill(0xffffff);
 		rec1.drawRect(0, 0, 160, 534);
@@ -51,20 +43,18 @@ Ball.Game.prototype = {
 		best = this.add.text(10, 60, ' ');
 		best.scale.setTo(0.5);
 		text3.tint = 0xaf9e00;
-		coin2 = this.add.sprite(183, 30, 'coin');
-		coin2.scale.setTo(1.5);;
-		coin2.animations.add('turn2', [0,1,2,3,4,5], 9, true);
-		coin2.play('turn2');
+		coin2 = this.add.sprite(193, 35, 'coin');
+		// coin2.animations.add('turn2', [0,1,2,3,4,5], 9, true);
+		// coin2.play('turn2');
+		coin2.smoothed = false;
 		
 		this.physics.startSystem(Phaser.Physics.ARCADE);
-		this.time.desiredFps = 70;
+		this.time.desiredFps = 60;
 		this.physics.arcade.gravity.y = 700;
 		
-		coin = this.add.sprite(168+this.getRandomInt(168), 70+this.getRandomInt(200), 'coin');
+		coin = this.add.sprite(16+this.getRandomInt(304), 70+this.getRandomInt(403), 'coin');
 		this.physics.arcade.enable(coin);
 		coin.body.allowGravity = false;
-		coin.inputEnabled = true;
-		coin.events.onInputDown.add(this.onCollision, this);
 		coin.animations.add('turn', [0,1,2,3,4,5], 9, true);
 		coin.play('turn');
 		
@@ -75,6 +65,7 @@ Ball.Game.prototype = {
 		jumpright = player.animations.add('jumpright', [1+mult], 13, true);
 		jumpleft = player.animations.add('jumpleft', [7+mult], 13, true);
 		player.smoothed = false;
+
 		player.scale.set(1.5);
 		fire = 1;
 		
@@ -103,6 +94,14 @@ Ball.Game.prototype = {
 		emitter2 = this.game.add.emitter(0, 0, 100);
 		emitter2.makeParticles('particle2');
 		emitter2.gravity = 200;
+		
+		//weapon
+		weapon = this.add.weapon(30, 'particle');
+		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+		weapon.bulletSpeed = 600;
+		weapon.fireRate = 100;
+		weapon.trackSprite(player, 15, 15, false);
+		weapon.bulletGravity.y = -700;
 
 	},
 	listener1: function() {
@@ -113,6 +112,9 @@ Ball.Game.prototype = {
 				player.play('jumpleft');
 			}
 		}
+		else{
+			weapon.fire();
+		}
 	},
 	listener2: function() {
 		if(player.body.touching.down && player.x <=168){
@@ -121,6 +123,9 @@ Ball.Game.prototype = {
 			if(vel == 250){
 				player.play('jumpright');
 			}
+		}
+		else{
+			weapon.fire();
 		}
 	},
 	createPlat: function() {
@@ -145,20 +150,11 @@ Ball.Game.prototype = {
 		if(coin.alpha == 1){
 			pieces += 1;
 			text3.setText(pieces);
-			piece.alpha = 0;
 			emitter2.x = piece.x;
 			emitter2.y = piece.y+30;
 			emitter2.start(true, 2000, null, 10);
-			if(player.x >168){
-				this.listener1();
-				coin1x = 10+this.getRandomInt(148);
-				coin1y = 70+this.getRandomInt(200);
-			}
-			else{
-				this.listener2();
-				coin2x = 158+this.getRandomInt(148);
-				coin2y = 70+this.getRandomInt(200);
-			}
+			piece.x = 16+this.getRandomInt(304);
+			piece.y = 70+this.getRandomInt(403);
 		}
 	},
 	checkOverlap: function(spriteA,spriteB) {
@@ -199,6 +195,7 @@ Ball.Game.prototype = {
 		if (player.body.touching.right === true || player.body.blocked.right === true)
 		{
 			vel = -250;
+			weapon.fireAngle = Phaser.ANGLE_LEFT;
 			player.body.velocity.x = vel;
 			if(lock == 1){
 				player.play('left');
@@ -210,6 +207,7 @@ Ball.Game.prototype = {
 		else if (player.body.touching.left === true ||player.body.blocked.left === true)
 		{
 			vel = 250;
+			weapon.fireAngle = Phaser.ANGLE_RIGHT;
 			player.body.velocity.x = vel;
 			if(lock == 1){
 				player.play('right');
@@ -237,9 +235,6 @@ Ball.Game.prototype = {
 			if(lock22==1){
 				rec1.alpha = 0.1;
 				rec2.alpha = 0;
-				coin.alpha = 1;
-				coin.x = coin1x;
-				coin.y = coin1y;
 				lock22 = 0;
 			}
 			lock21 = 1;
@@ -249,12 +244,12 @@ Ball.Game.prototype = {
 			if(lock21==1){
 				rec1.alpha = 0;
 				rec2.alpha = 0.1;
-				coin.alpha = 1;
-				coin.x = coin2x;
-				coin.y = coin2y;
 				lock21 = 0;
 			}
 			lock22 = 1;
+		}
+		if (this.checkOverlap(weapon.bullets, coin)&& coin.alive){
+			this.onCollision(coin);
 		}
 	},
 	render: function() {
