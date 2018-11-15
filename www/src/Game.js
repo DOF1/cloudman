@@ -13,6 +13,7 @@ Ball.Game.prototype = {
 		lock = 1;
 		lock22 = 1;
 		lock21 = 0;
+		ammo = 10;
 		rec1 = this.game.add.graphics(0,0);
 		rec1.beginFill(0xffffff);
 		rec1.drawRect(0, 0, 160, 534);
@@ -33,30 +34,41 @@ Ball.Game.prototype = {
 		}
 		if(!pieces){
 			pieces = 0;
-			text3 = this.add.bitmapText(230, 30, 'myfont', '0', 30);
+			text3 = this.add.text(225, 25, '0', { font: '27px Arial Black', fill: '#FBDE12', strokeThickness :'4',fontWeight:'bold',boundsAlignH: 'right',boundsAlignV: 'top'});
 		}
 		else{
-			text3 = this.add.bitmapText(230, 30, 'myfont', localStorage.pieces, 30);
+			text3 = this.add.text(225, 25, localStorage.pieces, { font: '27px Arial Black', fill: '#FBDE12', strokeThickness :'4',fontWeight:'bold',boundsAlignH: 'right',boundsAlignV: 'top'});
 		}
-		text = this.add.bitmapText(5, 5, 'myfont', '0', 60);
-		text2 = this.add.bitmapText(230, 1, 'myfont', highscore, 32);
+		text3.setTextBounds(0,0,0,0);
+		text = this.add.text(5, -10, '0', { font: '60px Arial', fill: '#fff', strokeThickness :'6',fontWeight:'bold'  });
+		text2 = this.add.text(230, -3, highscore, { font: '27px Arial Black', fill: '#06b6ff', strokeThickness :'4',fontWeight:'bold'  });
 		best = this.add.text(10, 60, ' ');
 		best.scale.setTo(0.5);
-		text3.tint = 0xaf9e00;
-		coin2 = this.add.sprite(193, 35, 'coin');
-		// coin2.animations.add('turn2', [0,1,2,3,4,5], 9, true);
-		// coin2.play('turn2');
+		coin2 = this.add.sprite(230, 38, 'coin');
+		coin2.animations.add('turn2', [0,1,2,3,4,5], 9, true);
+		coin2.play('turn2');
 		coin2.smoothed = false;
+		text4 = this.add.text(20, 75, ammo, { font: '22px Arial', fill: '#000',boundsAlignH: 'right',boundsAlignV: 'top'});
+		text4.setTextBounds(0,0,0,0);
+		ammoAff = this.add.sprite(3,85,'particle');
+		ammoAff.scale.setTo(1.3);
 		
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		this.time.desiredFps = 60;
 		this.physics.arcade.gravity.y = 700;
 		
-		coin = this.add.sprite(16+this.getRandomInt(304), 70+this.getRandomInt(403), 'coin');
+		coin = this.add.sprite(400, 70+this.getRandomInt(403), 'coin');
 		this.physics.arcade.enable(coin);
 		coin.body.allowGravity = false;
 		coin.animations.add('turn', [0,1,2,3,4,5], 9, true);
 		coin.play('turn');
+		this.game.time.events.add(5000+Math.floor(Math.random() * Math.floor(5000)), function() {coin.x = 16+Math.floor(Math.random() * Math.floor(304));},coin)
+		
+		am = this.add.sprite(400, 70+this.getRandomInt(403), 'particle');
+		this.physics.arcade.enable(am);
+		am.body.allowGravity = false;
+		am.scale.setTo(1.5);
+		this.game.time.events.add(5000+Math.floor(Math.random() * Math.floor(5000)), function() {am.x=16+Math.floor(Math.random() * Math.floor(304))},am)
 		
 		player = this.add.sprite(10, 0, 'player');
 		mult = (skin-1)*12;
@@ -75,6 +87,17 @@ Ball.Game.prototype = {
 		
 		cursors = this.input.keyboard.createCursorKeys();
 		player.body.velocity.x = -300;
+		
+		enemy = this.add.sprite(500, 0, 'player');
+		rightEnemy = enemy.animations.add('rightEnemy', [0], 0, true);
+		leftEnemy = enemy.animations.add('leftEnemy', [6], 0, true);
+		enemy.smoothed = true;
+		enemy.tint = 0xFF5555 ;
+		enemy.scale.set(1.5);
+		this.physics.arcade.enable(enemy);
+		enemy.checkWorldBounds = true;
+		enemy.events.onOutOfBounds.add(function() {this.game.time.events.add(5000+Math.floor(Math.random() * Math.floor(5000)), this.spawnEnemy,enemy)}, this);
+
 		
 		platforms = this.add.group();
 		ledge = platforms.create(0, 52, 'platform');
@@ -101,8 +124,7 @@ Ball.Game.prototype = {
 		weapon.bulletSpeed = 600;
 		weapon.fireRate = 100;
 		weapon.trackSprite(player, 15, 15, false);
-		weapon.bulletGravity.y = -700;
-
+		weapon.bulletGravity.y = -500;
 	},
 	listener1: function() {
 		if(player.body.touching.down && player.x >168){
@@ -113,7 +135,11 @@ Ball.Game.prototype = {
 			}
 		}
 		else{
-			weapon.fire();
+			if(ammo>0){
+				weapon.fire();
+				ammo--;
+				text4.setText(ammo);
+			}
 		}
 	},
 	listener2: function() {
@@ -125,7 +151,11 @@ Ball.Game.prototype = {
 			}
 		}
 		else{
-			weapon.fire();
+			if(ammo>0){
+				weapon.fire();
+				ammo--;
+				text4.setText(ammo);
+			}
 		}
 	},
 	createPlat: function() {
@@ -147,15 +177,16 @@ Ball.Game.prototype = {
 		this.game.time.events.add(time, this.createPlat,this);
 	},
 	onCollision: function(piece) {
-		if(coin.alpha == 1){
-			pieces += 1;
-			text3.setText(pieces);
-			emitter2.x = piece.x;
-			emitter2.y = piece.y+30;
-			emitter2.start(true, 2000, null, 10);
-			piece.x = 16+this.getRandomInt(304);
-			piece.y = 70+this.getRandomInt(403);
-		}
+		pieces += 1;
+		text3.setText(pieces);
+		emitter2.x = piece.x;
+		emitter2.y = piece.y;
+		emitter2.start(true, 2000, null, 10);
+		piece.x=400;
+		this.game.time.events.add(5000+Math.floor(Math.random() * Math.floor(5000)),function(){
+					piece.x = 16+Math.floor(Math.random() * Math.floor(304));
+					piece.y = 70+Math.floor(Math.random() * Math.floor(403));
+			},am);
 	},
 	checkOverlap: function(spriteA,spriteB) {
 		var boundsA = spriteA.getBounds();
@@ -169,20 +200,37 @@ Ball.Game.prototype = {
 	onCollisionLedge: function(plr,platform) {
 		if(platform.tint==16777215&& player.body.touching.down){
 			platform.tint = 0x1FBDFF;
-			emitter.x = player.x;
-			emitter.y = player.y+30;
-			emitter.start(true, 2000, null, 10);
 			score++;
 			text.setText(score);
+		}
+	},
+	spawnEnemy: function() {
+		enemy.body.allowGravity = false;
+		enemy.alpha = 0;
+		this.game.add.tween(enemy).to( { alpha: 1 }, 3000, Phaser.Easing.Linear.None, true, 0, 0, false);
+		enemy.body.enable = false;
+		this.game.time.events.add(3000, function() {enemy.body.allowGravity = true;enemy.alpha = 1;enemy.body.enable = false;},enemy)
+		enemy.body.velocity.x = 0;
+		enemy.body.velocity.y = 0;
+		enemy.x = 15 + Math.floor(Math.random() * Math.floor(300));
+		enemy.y = 55;
+		if(enemy.x<=160){
+			enemy.play('rightEnemy');
+		}
+		else{
+			enemy.play('leftEnemy');
 		}
 	},
 	update: function() {
 		background.tilePosition.y += 0.5;
 		this.physics.arcade.collide(platforms, player,this.onCollisionLedge);
+		this.physics.arcade.collide(platforms, enemy);
+		this.physics.arcade.collide(weapon.bullets, enemy);
+		ammoAff.x = player.x + 20;
+		ammoAff.y = player.y - 15;
+		text4.x = player.x+15;
+		text4.y = player.y-25;
 		if(lock == 0 && player.body.touching.down){
-			emitter.x = player.x;
-			emitter.y = player.y+30;
-			emitter.start(true, 2000, null, 10);
 			if (vel == -250){
 				player.play('left');
 				lock = 1;
@@ -216,7 +264,7 @@ Ball.Game.prototype = {
 				player.play('jumpright');
 			}
 		}
-		if(player.body.blocked.down){
+		if(player.body.blocked.down ||( this.checkOverlap(player, enemy) && enemy.alive)){
 			if(score>highscore){
 				localStorage.highscore = score;
 			}
@@ -248,8 +296,21 @@ Ball.Game.prototype = {
 			}
 			lock22 = 1;
 		}
-		if (this.checkOverlap(weapon.bullets, coin)&& coin.alive){
+		if (this.checkOverlap(player, coin)&& coin.alive){
 			this.onCollision(coin);
+		}
+		if (this.checkOverlap(player, am)&& am.alive){
+			ammo += 5;
+			text4.setText(ammo);
+			emitter.x = am.x;
+			emitter.y = am.y;
+			emitter.start(true, 2000, null, 10);
+			am.x = 400;
+			this.game.time.events.add(5000+Math.floor(Math.random() * Math.floor(5000)),function(){
+					am.x = 16+Math.floor(Math.random() * Math.floor(304));
+					am.y = 70+Math.floor(Math.random() * Math.floor(403));
+			},am);
+			
 		}
 	},
 	render: function() {

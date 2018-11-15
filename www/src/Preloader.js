@@ -11,7 +11,6 @@ Ball.Preloader.prototype = {
 		this.load.image('screen-howtoplay', 'img/screen-howtoplay.png');
 		this.load.image('platform', 'img/plat.png');
 		this.load.image('screen-bg', 'img/screen-bg.png');
-		this.load.bitmapFont('myfont', 'font/font.png', 'font/font.fnt');
 		
 		this.load.spritesheet('coin', 'img/coin.png',16,16);
 		this.load.spritesheet('selec', 'img/selection.png', 100, 100);

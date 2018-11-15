@@ -33,11 +33,11 @@ Ball.MainMenu.prototype = {
 		if(!pieces){
 			pieces = "0";
 		}
-		text2 = this.add.bitmapText(180, 155, 'myfont', highscore, 32);
-		text3 = this.add.bitmapText(180, 185, 'myfont', pieces, 32);
-		text3.tint = 0xaf9e00;
-		coin = this.add.sprite(133, 187, 'coin');
-		coin.scale.setTo(1.5);;
+		text2 = this.add.text(180, 153, highscore, { font: '27px Arial Black', fill: '#06b6ff', strokeThickness :'4',fontWeight:'bold'  });
+		text3 = this.add.text(178, 183, pieces, { font: '27px Arial Black', fill: '#FBDE12', strokeThickness :'4',fontWeight:'bold',boundsAlignH: 'right',boundsAlignV: 'top' });
+		text3.setTextBounds(0,0,0,0);
+		coin = this.add.sprite(183, 193, 'coin');
+		coin.scale.setTo(1.2);
 		coin.animations.add('turn', [0,1,2,3,4,5], 9, true);
 		coin.play('turn');
 
